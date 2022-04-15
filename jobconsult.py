@@ -3,8 +3,6 @@ import numpy as np
 import pandas as pd
 import random
 import pickle
-import matplotlib.pyplot as plt
-import seaborn as sns
 
 def get_classifier(clf_name,jobid,all_about_job):
     clf = None
