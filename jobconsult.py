@@ -3,36 +3,38 @@ import numpy as np
 import pandas as pd
 import random
 import pickle
+from pathlib import Path
+
+filename1 = Path("C:\\Users\\ergou\\Documents\\PythonScripts\\consultjob\\trained_model.sav")
+filename2 = Path("C:\\Users\\ergou\\Documents\\PythonScripts\\consultjob\\trained_lr_model.sav")
+filename3 = Path("C:\\Users\\ergou\\Documents\\PythonScripts\\consultjob\\trained_rf_model.sav")
+loaded_model = pickle.load(open(filename1, 'rb'))
+loaded_lr_model = pickle.load(open(filename2, 'rb'))
+loaded_rf_model = pickle.load(open(filename3, 'rb'))
+
+# prediction = loaded_model.predict(X_test[[1]])
+# print(prediction)
 
 def get_classifier(clf_name,jobid,all_about_job):
     clf = None
     if clf_name == 'SVC':
         st.write('SVC Accuracy: 0.98')
-        with open('C:\\Users\\ergou\\Documents\\pipe_svc.pkl', 'rb') as pickle_in_svc:
-            pipe_svc = pickle.load(pickle_in_svc)
-        predicted_svc = pipe_svc.predict([[jobid,all_about_job]])
-        st.success('The output is {}'.format(predicted_svc))
-        st.write('svc Accuracy: 0.98') 
+        predicted_svc = loaded_model.predict([[jobid,all_about_job]])
+        print(predicted_svc)
         return predicted_svc
     elif clf_name == 'LogisticRegression':
         st.write('lr Accuracy: 0.98')  
-        with open('C:\\Users\\ergou\\Documents\\pipe_lr.pkl', 'rb') as pickle_in_lr:
-            pipe_lr = pickle.load(pickle_in_lr)
-        predicted_lr = pipe_lr.predict([[jobid,all_about_job]])
-        st.success('The output is {}'.format(predicted_lr))
-        st.write('lr Accuracy: 0.98') 
+        predicted_lr = loaded_model.predict([[jobid,all_about_job]])
+        print(predicted_lr)
         return predicted_lr  
     else:
-        with open('C:\\Users\\ergou\\Documents\\pipe_rf.pkl', 'rb') as pickle_in_rf:
-            pipe_rf = pickle.load(pickle_in_rf)
-        predicted_rf = pipe_rf.predict([[jobid,all_about_job]])
-        st.success('The output is {}'.format(predicted_rf))
+        prediction_rf = loaded_model.predict([[jobid,all_about_job]])
+        print(prediction_rf)
         st.write('SVC Accuracy: 0.98')
-        return predicted_rf
+        return prediction_rf
 
-# clf = get_classifier(classifier_name)
 
-def main():
+if __name__=='__main__':
     st.title("hello streamlit")
     st.write("""#explore diff clasifier
     which one is best""")
@@ -44,9 +46,44 @@ def main():
     if st.button("Predict"):
         predicted = get_classifier(classifier_name,jobid,all_about_job)
         st.success('The output is {}'.format(predicted))
+
+
+
+# def get_classifier(clf_name,jobid,all_about_job):
+#     clf = None
+#     if clf_name == 'SVC':
+#         st.write('SVC Accuracy: 0.98')
+#         predicted_svc = pipe_svc1.predict([[jobid,all_about_job]])
+#         # predicted_svc = pipe_svc.predict([[jobid,all_about_job]])
+#         print('The output is {}'.format(predicted_svc))
+#         st.write('svc Accuracy: 0.98') 
+#         return predicted_svc
+#     elif clf_name == 'LogisticRegression':
+#         st.write('lr Accuracy: 0.98')  
+        
+#         predicted_lr = pipe_lr2.predict([[jobid,all_about_job]])
+#         print('The output is {}'.format(predicted_lr))
+#         st.write('lr Accuracy: 0.98') 
+#         return predicted_lr  
+#     else:
+        
+#         predicted_rf = pipe_rf3.predict([[jobid,all_about_job]])
+#         print('The output is {}'.format(predicted_rf))
+#         st.write('SVC Accuracy: 0.98')
+#         return predicted_rf
+
+# # clf = get_classifier(classifier_name)
+
+# def main():
+#     st.title("hello streamlit")
+#     st.write("""#explore diff clasifier
+#     which one is best""")
+#     classifier_name = st.sidebar.selectbox("select classifier",(" LogisticRegression"," RandomForestClassifier"," SVC"))
     
-
-
-if __name__=='__main__':
-	main()
-
+#     # this is usefuull for manything
+#     jobid = st.text_input(" job", "Type Here")
+#     all_about_job = st.text_input("proper description of job", "Type Here")
+#     if st.button("Predict"):
+#         predicted = get_classifier(classifier_name,jobid,all_about_job)
+#         st.success('The output is {}'.format(predicted))
+    
